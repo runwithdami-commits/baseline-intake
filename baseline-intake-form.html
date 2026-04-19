@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baseline — Student Intake Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F2EDD8;
+    --cream-warm: #EDE6CE;
+    --ink: #1C1A14;
+    --ink-mid: #4A4438;
+    --ink-light: #8A7F6E;
+    --teal: #1F9E9E;
+    --teal-dark: #166E6E;
+    --dot: #C8BFA8;
+    --field-bg: #FAF7EE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #D9D2C0;
+    font-family: 'Barlow Condensed', sans-serif;
+    padding: 40px 20px 60px;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--cream);
+    border: 10px solid var(--ink);
+    position: relative;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid var(--ink);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .page-inner {
+    padding: 40px 44px 48px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 7px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .topbar span {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .topbar .dot { color: var(--teal-dark); }
+
+  /* ── Masthead ── */
+  .masthead {
+    text-align: center;
+    padding: 8px 0 14px;
+  }
+
+  .masthead-kicker {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 6px;
+  }
+
+  .masthead h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 11vw, 96px);
+    letter-spacing: 0.1em;
+    line-height: 0.88;
+    color: var(--ink);
+  }
+
+  .masthead-tagline {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--teal-dark);
+    margin-top: 10px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding: 7px 0;
+  }
+
+  /* ── Dark intro band ── */
+  .intro-band {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 16px 32px;
+    margin: 0 -44px;
+    text-align: center;
+  }
+
+  .intro-band strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .intro-band p {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 12px;
+    font-style: italic;
+    color: #9A9080;
+    line-height: 1.6;
+  }
+
+  /* ── Section rule ── */
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 18px;
+  }
+
+  .section-rule span {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    white-space: nowrap;
+  }
+
+  .section-rule::before,
+  .section-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ink);
+  }
+
+  /* ── Form fields ── */
+  .field-group {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 4px;
+  }
+
+  .field-group.two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .field-group.three-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  label .req {
+    color: var(--teal-dark);
+    margin-left: 2px;
+  }
+
+  label .sub {
+    display: block;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    background: var(--field-bg);
+    border: 1px solid var(--dot);
+    border-bottom: 2px solid var(--ink);
+    padding: 10px 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--teal-dark);
+    border-bottom-color: var(--teal-dark);
+    background: #fff;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231C1A14' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  /* ── Radio / Checkbox groups ── */
+  .choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .choice-item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+  }
+
+  .choice-item input[type="radio"],
+  .choice-item input[type="checkbox"] {
+    display: none;
+  }
+
+  .choice-label {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    border: 1px solid var(--dot);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--field-bg);
+    user-select: none;
+  }
+
+  .choice-item input:checked + .choice-label {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ── Scale row ── */
+  .scale-row {
+    display: flex;
+    gap: 0;
+    margin-top: 2px;
+  }
+
+  .scale-row .choice-item { flex: 1; }
+  .scale-row .choice-label {
+    width: 100%;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 13px;
+    border-right: none;
+  }
+  .scale-row .choice-item:last-child .choice-label { border-right: 1px solid var(--dot); }
+  .scale-row .choice-item input:checked + .choice-label { border-right: 1px solid var(--ink); }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .scale-labels span {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 9px;
+    font-style: italic;
+    color: var(--ink-light);
+  }
+
+  /* ── Open text callout ── */
+  .callout-field {
+    background: var(--cream-warm);
+    border: 1px solid var(--dot);
+    border-left: 3px solid var(--teal-dark);
+    padding: 16px 18px 18px;
+    margin-top: 4px;
+  }
+
+  .callout-field label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .callout-field textarea {
+    background: #fff;
+    min-height: 80px;
+  }
+
+  /* ── Submit ── */
+  .submit-area {
+    margin-top: 32px;
+    border-top: 2px solid var(--ink);
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .submit-note {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.7;
+    max-width: 380px;
+  }
+
+  .submit-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    background: var(--teal-dark);
+    border: none;
+    padding: 14px 32px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .submit-btn:hover { background: var(--ink); }
+
+  .bottom-meta {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--dot);
+    padding-top: 8px;
+  }
+
+  .bottom-meta span {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  /* ── Confirmation message ── */
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 48px 32px;
+  }
+
+  .confirmation h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 0.08em;
+    color: var(--teal-dark);
+    margin-bottom: 10px;
+  }
+
+  .confirmation p {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    body { padding: 16px 12px 40px; }
+    .page-inner { padding: 24px 20px 32px; }
+    .intro-band { margin: 0 -20px; }
+    .field-group.two-col,
+    .field-group.three-col { grid-template-columns: 1fr; }
+    .submit-area { flex-direction: column; align-items: flex-start; }
+    .topbar { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-inner">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <span>School for Runners</span>
+      <span class="dot">✦</span>
+      <span>Washington D.C. Metro</span>
+      <span class="dot">✦</span>
+      <span>Student Intake</span>
+    </div>
+
+    <!-- Masthead -->
+    <div class="masthead">
+      <div class="masthead-kicker">New Student Intake Form</div>
+      <h1>BASELINE</h1>
+      <div class="masthead-tagline">Before we build your curriculum, we need to understand you.</div>
+    </div>
+
+    <!-- Intro band -->
+    <div class="intro-band">
+      <strong>This Is Not a Test. There Are No Wrong Answers.</strong>
+      <p>This form helps us understand where you are, what's been getting in the way, and how to build something that actually fits your body and your life. Be honest — it makes the curriculum better.</p>
+    </div>
+
+    <form id="intake-form" action="https://formspree.io/f/mzdyewkl" method="POST">
+
+      <!-- Formspree hidden fields -->
+      <input type="hidden" name="_subject" value="New Baseline Student Intake">
+      <input type="hidden" name="_next" value="">
+
+      <!-- Section 1: About You -->
+      <div class="section-rule"><span>About You</span></div>
+
+      <div class="field-group two-col">
+        <div class="field">
+          <label>First Name <span class="req">✦</span></label>
+          <input type="text" name="first_name" placeholder="First name" required>
+        </div>
+        <div class="field">
+          <label>Last Name <span class="req">✦</span></label>
+          <input type="text" name="last_name" placeholder="Last name" required>
+        </div>
+      </div>
+
+      <div class="field-group two-col" style="margin-top:18px">
+        <div class="field">
+          <label>Email <span class="req">✦</span></label>
+          <input type="email" name="_replyto" placeholder="your@email.com" required>
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input type="tel" name="phone" placeholder="(000) 000-0000">
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="field">
+          <label>City / Neighborhood
+            <span class="sub">We run in person — knowing your area helps with logistics.</span>
+          </label>
+          <input type="text" name="location" placeholder="e.g. Columbia Heights, Bethesda, Silver Spring...">
+        </div>
+      </div>
+
+      <!-- Section 2: Your Running -->
+      <div class="section-rule"><span>Your Running</span></div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>How long have you been running? <span class="req">✦</span></label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="running_experience" value="Less than 1 year"><span class="choice-label">Less than 1 year</span></label>
+            <label class="choice-item"><input type="radio" name="running_experience" value="1–3 years"><span class="choice-label">1–3 years</span></label>
+            <label class="choice-item"><input type="radio" name="running_experience" value="3–5 years"><span class="choice-label">3–5 years</span></label>
+            <label class="choice-item"><input type="radio" name="running_experience" value="5–10 years"><span class="choice-label">5–10 years</span></label>
+            <label class="choice-item"><input type="radio" name="running_experience" value="10+ years"><span class="choice-label">10+ years</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="field">
+          <label>How many days per week are you currently running?</label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="days_per_week" value="0–1 days"><span class="choice-label">0–1 days</span></label>
+            <label class="choice-item"><input type="radio" name="days_per_week" value="2–3 days"><span class="choice-label">2–3 days</span></label>
+            <label class="choice-item"><input type="radio" name="days_per_week" value="4–5 days"><span class="choice-label">4–5 days</span></label>
+            <label class="choice-item"><input type="radio" name="days_per_week" value="6+ days"><span class="choice-label">6+ days</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group two-col" style="margin-top:18px">
+        <div class="field">
+          <label>Average weekly mileage (approximate)</label>
+          <select name="weekly_mileage">
+            <option value="" disabled selected>Select a range</option>
+            <option>Under 10 miles</option>
+            <option>10–20 miles</option>
+            <option>20–30 miles</option>
+            <option>30–40 miles</option>
+            <option>40–50 miles</option>
+            <option>50+ miles</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Typical long run distance</label>
+          <select name="long_run_distance">
+            <option value="" disabled selected>Select a range</option>
+            <option>Under 5 miles</option>
+            <option>5–8 miles</option>
+            <option>8–12 miles</option>
+            <option>12–16 miles</option>
+            <option>16+ miles</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="field">
+          <label>What type of running do you primarily do?</label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="checkbox" name="running_type" value="Road"><span class="choice-label">Road</span></label>
+            <label class="choice-item"><input type="checkbox" name="running_type" value="Trail"><span class="choice-label">Trail</span></label>
+            <label class="choice-item"><input type="checkbox" name="running_type" value="Track"><span class="choice-label">Track</span></label>
+            <label class="choice-item"><input type="checkbox" name="running_type" value="Treadmill"><span class="choice-label">Treadmill</span></label>
+            <label class="choice-item"><input type="checkbox" name="running_type" value="Mixed"><span class="choice-label">Mixed</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Your Goals -->
+      <div class="section-rule"><span>Your Goals</span></div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>What is your primary goal right now? <span class="req">✦</span></label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="primary_goal" value="Train for a specific race"><span class="choice-label">Train for a specific race</span></label>
+            <label class="choice-item"><input type="radio" name="primary_goal" value="Build consistency"><span class="choice-label">Build consistency</span></label>
+            <label class="choice-item"><input type="radio" name="primary_goal" value="Stop getting injured"><span class="choice-label">Stop getting injured</span></label>
+            <label class="choice-item"><input type="radio" name="primary_goal" value="Improve form & mechanics"><span class="choice-label">Improve form &amp; mechanics</span></label>
+            <label class="choice-item"><input type="radio" name="primary_goal" value="Run for life"><span class="choice-label">Run for life</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group two-col" style="margin-top:18px">
+        <div class="field">
+          <label>Goal race or event (if applicable)</label>
+          <input type="text" name="goal_race" placeholder="e.g. Juneteenth Half Marathon, MCM...">
+        </div>
+        <div class="field">
+          <label>Race date (if applicable)</label>
+          <input type="text" name="race_date" placeholder="e.g. June 2026">
+        </div>
+      </div>
+
+      <!-- Section 4: Injury History -->
+      <div class="section-rule"><span>Injury History</span></div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>Have you had a running-related injury in the last 2 years? <span class="req">✦</span></label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="injury_history" value="No"><span class="choice-label">No</span></label>
+            <label class="choice-item"><input type="radio" name="injury_history" value="Yes — minor, resolved"><span class="choice-label">Yes — minor, resolved</span></label>
+            <label class="choice-item"><input type="radio" name="injury_history" value="Yes — significant"><span class="choice-label">Yes — significant</span></label>
+            <label class="choice-item"><input type="radio" name="injury_history" value="Yes — still dealing with it"><span class="choice-label">Yes — still dealing with it</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="callout-field">
+          <label>If you've had injuries, briefly describe them.
+            <span class="sub">Location, what happened, how long it sidelined you. Be specific — this shapes your curriculum.</span>
+          </label>
+          <textarea name="injury_detail" placeholder="e.g. Left knee IT band flare up after week 8 of marathon training. Sidelined for 6 weeks in 2024. Also chronic tight hip flexors on my right side..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 5: Your Body & Training -->
+      <div class="section-rule"><span>Your Body &amp; Training</span></div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>Do you currently do any strength or mobility work?</label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="strength_work" value="No"><span class="choice-label">No</span></label>
+            <label class="choice-item"><input type="radio" name="strength_work" value="Occasionally"><span class="choice-label">Occasionally</span></label>
+            <label class="choice-item"><input type="radio" name="strength_work" value="1–2x per week"><span class="choice-label">1–2x per week</span></label>
+            <label class="choice-item"><input type="radio" name="strength_work" value="3+ times per week"><span class="choice-label">3+ times per week</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="field">
+          <label>On a scale of 1–5, how would you rate your body awareness during running?
+            <span class="sub">Can you feel when something is off — foot strike, hip drop, breathing — without being told?</span>
+          </label>
+          <div class="scale-row">
+            <label class="choice-item"><input type="radio" name="body_awareness" value="1"><span class="choice-label">1</span></label>
+            <label class="choice-item"><input type="radio" name="body_awareness" value="2"><span class="choice-label">2</span></label>
+            <label class="choice-item"><input type="radio" name="body_awareness" value="3"><span class="choice-label">3</span></label>
+            <label class="choice-item"><input type="radio" name="body_awareness" value="4"><span class="choice-label">4</span></label>
+            <label class="choice-item"><input type="radio" name="body_awareness" value="5"><span class="choice-label">5</span></label>
+          </div>
+          <div class="scale-labels">
+            <span>I run by feel, no idea what's happening</span>
+            <span>I can sense patterns clearly</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Enrollment Track -->
+      <div class="section-rule"><span>Enrollment Track Interest</span></div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>Which track are you most interested in? <span class="req">✦</span>
+            <span class="sub">Not a commitment — just helps us prepare for your intake call.</span>
+          </label>
+          <div class="choice-group">
+            <label class="choice-item"><input type="radio" name="track_interest" value="Track 01 — Full Curriculum + Mentorship ($1,200)"><span class="choice-label">Track 01 — Full Curriculum + Mentorship ($1,200)</span></label>
+            <label class="choice-item"><input type="radio" name="track_interest" value="Track 02 — Curriculum + Check-Ins ($300)"><span class="choice-label">Track 02 — Curriculum + Check-Ins ($300)</span></label>
+            <label class="choice-item"><input type="radio" name="track_interest" value="Track 03 — Self-Guided Curriculum ($125)"><span class="choice-label">Track 03 — Self-Guided Curriculum ($125)</span></label>
+            <label class="choice-item"><input type="radio" name="track_interest" value="Movement Diagnostic only ($150)"><span class="choice-label">Movement Diagnostic only ($150)</span></label>
+            <label class="choice-item"><input type="radio" name="track_interest" value="Not sure yet — let's talk"><span class="choice-label">Not sure yet — let's talk</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: The Real Question -->
+      <div class="section-rule"><span>The Real Question</span></div>
+
+      <div class="field-group">
+        <div class="callout-field">
+          <label>What keeps breaking down — and what have you already tried?
+            <span class="sub">This is the most important question on this form. Don't give us the polished version. Tell us what's actually going on.</span>
+          </label>
+          <textarea name="what_keeps_breaking_down" style="min-height:120px" placeholder="e.g. I keep building up mileage and then something goes wrong — shin splints, fatigue, motivation. I've tried following plans but they never feel built for me. I know something is off with my form but I don't know what..."></textarea>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:18px">
+        <div class="field">
+          <label>Anything else you want us to know before your intake call?</label>
+          <textarea name="anything_else" placeholder="Work schedule, time constraints, preferences, questions..."></textarea>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-area">
+        <div class="submit-note">
+          After you submit, we'll reach out within 48 hours to schedule your free intake call. That conversation is where enrollment actually begins.
+        </div>
+        <button type="submit" class="submit-btn">Submit Intake Form</button>
+      </div>
+
+    </form>
+
+    <!-- Confirmation -->
+    <div class="confirmation" id="confirmation">
+      <h2>You're In.</h2>
+      <p>We received your intake form and will be in touch within 48 hours to schedule your conversation.<br><br>
+      <em>Come ready to talk honestly. That's all we ask.</em></p>
+    </div>
+
+    <div class="bottom-meta">
+      <span>Baseline · School for Runners</span>
+      <span>baselinefitness.com</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Remove this script block once you've added your Formspree ID
+  // Formspree will handle the actual submission and redirect
+</script>
+</body>
+</html>
